@@ -12,7 +12,11 @@ public class InventoryDAOImpl implements InventoryDAO {
         // Initialize database connection
         connection = DBConnection.getConnection();
     }
-
+    
+     // Constructor with Connection parameter
+    public InventoryDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
     @Override
     public List<InventoryDTO> getAllItems() throws SQLException {
         List<InventoryDTO> items = new ArrayList<>();

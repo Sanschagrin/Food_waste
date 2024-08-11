@@ -14,6 +14,11 @@ public class CharitableDAOImpl implements CharitableDAO {
     public CharitableDAOImpl() throws SQLException, ClassNotFoundException {
     this.connection = DBConnection.getConnection();
     }
+    
+      // Constructor with Connection parameter
+    public CharitableDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     private static final String all = "SELECT * FROM charitable";
     private static final String byID = "SELECT * FROM charitable WHERE charitable_id = ?";

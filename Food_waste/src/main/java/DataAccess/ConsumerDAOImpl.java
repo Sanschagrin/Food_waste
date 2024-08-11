@@ -22,6 +22,11 @@ public class ConsumerDAOImpl implements ConsumerDAO{
     this.connection = DBConnection.getConnection();
     }
 
+     // Constructor with Connection parameter
+    public ConsumerDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
+
     private static final String all = "SELECT * FROM Consumers";
     private static final String byID = "SELECT * FROM Consumers WHERE consumer_id = ?";
     private static final String insert = "INSERT INTO Consumers (consumer_name, consumer_email, consumer_password, subscriber) VALUES (?, ?, ?, ?)";
