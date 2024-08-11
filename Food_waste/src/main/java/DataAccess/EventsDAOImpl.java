@@ -23,6 +23,14 @@ public class EventsDAOImpl implements EventsDAO {
     public EventsDAOImpl() throws SQLException, ClassNotFoundException {
         this.connection = DBConnection.getConnection();
     }
+    
+    /**
+     * Constructor with Connection paramete
+     * @param connection
+     */
+    public EventsDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     private static final String all = "SELECT * FROM Events";
     private static final String byID = "SELECT * FROM Events WHERE event_id = ?";
