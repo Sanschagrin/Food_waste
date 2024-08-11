@@ -47,9 +47,6 @@ public class AddItemServlet extends HttpServlet {
     }
 
     private double parseDoubleParameter(String parameter) {
-        if (parameter == null || parameter.isEmpty()) {
-            throw new NumberFormatException("Invalid double parameter: null or empty");
-        }
         return Double.parseDouble(parameter);
     }
 }

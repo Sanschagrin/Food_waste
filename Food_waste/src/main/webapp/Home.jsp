@@ -126,7 +126,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <div class="container">
         <h1>Retailer List</h1>
                 <a href="listNewsletters.jsp" class="newsletter-button">View Newsletters</a>
-        <h2>Newsletters</h2>
         <ul>
             <% 
                 List<NewsletterDTO> newsletters = (List<NewsletterDTO>) request.getAttribute("newsletters");

@@ -79,7 +79,7 @@
 <body>
     <h1>Add Newsletter</h1>
     <div class="container">
-        <form action="addNewsletter" method="post">
+        <form action="addNewsletterServlet" method="post">
             <label for="newsletter_name">Name:</label>
             <input type="text" id="newsletter_name" name="newsletter_name" required>
 
