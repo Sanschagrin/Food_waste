@@ -17,14 +17,16 @@ public class InventoryDTO {
     private String item_description;
     private double price;
     private Date expiry_date;
+    private int quantity;
     
-    public InventoryDTO(int item_id, int retailer_id, String item_name, String item_description, double price, Date expiry_date){
+    public InventoryDTO(int item_id, int retailer_id, String item_name, String item_description, double price, Date expiry_date, int quantity){
     this.item_id = item_id;
     this.retailer_id = retailer_id;
     this.item_name = item_name;
     this.item_description = item_description;
     this.price = price;
     this.expiry_date = expiry_date;
+    this.quantity = quantity;
         
     }
     
@@ -34,7 +36,7 @@ public class InventoryDTO {
     public void setItemId(int item_id){
         this.item_id = item_id;
     }
-    public int getRetailerid(){
+    public int getRetailerId(){
         return retailer_id;
     }
     public void setRetailerId(int retailer_id){
@@ -61,7 +63,15 @@ public class InventoryDTO {
     public Date getExpiryDate(){
         return expiry_date;
     }
-    public void setExpiryDat(Date expiry_date){
+    public void setExpiryDate(Date expiry_date){
         this.expiry_date = expiry_date;
+    }
+    
+    public int getQuantity(){
+        return quantity;
+    }
+    
+    public void setQuantity(int quantity){
+    this.quantity = quantity;
     }
 }

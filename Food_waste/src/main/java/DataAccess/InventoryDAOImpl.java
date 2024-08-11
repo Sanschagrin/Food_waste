@@ -1,40 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DataAccess;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ggreg
- */
-public class InventoryDAOImpl implements InventoryDAO{
-    private static Connection connection;
-    
-    public InventoryDAOImpl() throws SQLException, ClassNotFoundException {
-    this.connection = DBConnection.getConnection();
-    }
+public class InventoryDAOImpl implements InventoryDAO {
 
-    private static final String all = "SELECT * FROM Inventory";
-    private static final String byID = "SELECT * FROM Inventory WHERE item_id = ?";
-    private static final String insert = "INSERT INTO Inventory (retailer_id, item_name, item_description, price, expiry_date) VALUES (?, ?, ?, ?, ?)";
-    private static final String update = "UPDATE Inventory SET retailer_id = ?, item_name = ?, item_description = ?, price = ?, expiry_date = ? WHERE item_id = ?";
-    private static final String delete = "DELETE FROM Inventory WHERE item_id = ?";
+    private Connection connection;
+
+    public InventoryDAOImpl() throws SQLException, ClassNotFoundException {
+        // Initialize database connection
+        connection = DBConnection.getConnection();
+    }
 
     @Override
     public List<InventoryDTO> getAllItems() throws SQLException {
         List<InventoryDTO> items = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(all)) {
-            ResultSet results = preparedStatement.executeQuery();
-            while (results.next()) {
-                items.add(new InventoryDTO(results.getInt("item_id"), results.getInt("retailer_id"), results.getString("item_name"), results.getString("item_description"), results.getDouble("price"), results.getDate("expiry_date")));
+        String query = "SELECT * FROM inventory";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                InventoryDTO item = new InventoryDTO(
+                    rs.getInt("item_id"),
+                    rs.getInt("retailer_id"),
+                    rs.getString("item_name"),
+                    rs.getString("item_description"),
+                    rs.getDouble("price"),
+                    rs.getDate("expiry_date"),
+                    rs.getInt("quantity")
+                );
+                items.add(item);
             }
         }
         return items;
@@ -42,54 +37,85 @@ public class InventoryDAOImpl implements InventoryDAO{
 
     @Override
     public InventoryDTO getItemById(int item_id) throws SQLException {
-        InventoryDTO item = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(byID)) {
-            preparedStatement.setInt(1, item_id);
-            try(ResultSet results = preparedStatement.executeQuery()){
-            if (results.next()) {
-                return new InventoryDTO(results.getInt("item_id"), results.getInt("retailer_id"), results.getString("item_name"), results.getString("item_description"), results.getDouble("price"), results.getDate("expiry_date"));
-            }
+        String query = "SELECT * FROM inventory WHERE item_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, item_id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new InventoryDTO(
+                        rs.getInt("item_id"),
+                        rs.getInt("retailer_id"),
+                        rs.getString("item_name"),
+                        rs.getString("item_description"),
+                        rs.getDouble("price"),
+                        rs.getDate("expiry_date"),
+                        rs.getInt("quantity")
+                    );
+                }
             }
         }
-        return item;
+        return null;
     }
 
     @Override
     public void addItem(InventoryDTO item) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
-            preparedStatement.setString(1, item.getItemName());
-            preparedStatement.setString(2, item.getItemDescription());
-            preparedStatement.setDouble(3, item.getPrice());
-            preparedStatement.setDate(4, item.getExpiryDate());
-            preparedStatement.setInt(5, item.getRetailerid());
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Added item: " + item);
-            } else {
-                System.out.println("Failed to add item: " + item);
-            }
-    }
+        String query = "INSERT INTO inventory (retailer_id, item_name, item_description, price, expiry_date, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, item.getRetailerId());
+            stmt.setString(2, item.getItemName());
+            stmt.setString(3, item.getItemDescription());
+            stmt.setDouble(4, item.getPrice());
+            stmt.setDate(5, item.getExpiryDate());
+            stmt.setInt(6, item.getQuantity());
+            stmt.executeUpdate();
+        }
     }
 
     @Override
     public void updateItem(InventoryDTO item) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(update)) {
-            preparedStatement.setString(1, item.getItemName());
-            preparedStatement.setString(2, item.getItemDescription());
-            preparedStatement.setDouble(4, item.getPrice());
-            preparedStatement.setDate(5, item.getExpiryDate());
-            preparedStatement.executeUpdate();
+        String query = "UPDATE inventory SET retailer_id = ?, item_name = ?, item_description = ?, price = ?, expiry_date = ?, quantity = ? WHERE item_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, item.getRetailerId());
+            stmt.setString(2, item.getItemName());
+            stmt.setString(3, item.getItemDescription());
+            stmt.setDouble(4, item.getPrice());
+            stmt.setDate(5, item.getExpiryDate());
+            stmt.setInt(6, item.getQuantity());
+            stmt.setInt(7, item.getItemId());
+            stmt.executeUpdate();
         }
     }
 
     @Override
-    public void deleteItem(InventoryDTO item) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(delete)) {
-            preparedStatement.setInt(1, item.getItemId());
-            preparedStatement.executeUpdate();
+    public void deleteItem(int item_id) throws SQLException {
+        String query = "DELETE FROM inventory WHERE item_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, item_id);
+            stmt.executeUpdate();
         }
     }
 
+    @Override
+    public List<InventoryDTO> getItemsByRetailerId(int retailerId) throws SQLException {
+        List<InventoryDTO> items = new ArrayList<>();
+        String query = "SELECT * FROM inventory WHERE retailer_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, retailerId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    InventoryDTO item = new InventoryDTO(
+                        rs.getInt("item_id"),
+                        rs.getInt("retailer_id"),
+                        rs.getString("item_name"),
+                        rs.getString("item_description"),
+                        rs.getDouble("price"),
+                        rs.getDate("expiry_date"),
+                        rs.getInt("quantity")
+                    );
+                    items.add(item);
+                }
+            }
+        }
+        return items;
+    }
 }
-
-

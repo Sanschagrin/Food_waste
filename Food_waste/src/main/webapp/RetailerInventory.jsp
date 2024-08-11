@@ -1,31 +1,40 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<%-- 
-    Document   : RetailerHome
-    Created on : Aug. 6, 2024, 3:29:09 p.m.
-    Author     : mylen
---%>
-
-<f:view>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="DataAccess.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="DataAccess.*" %>
+
 <%
-    RetailerDTO retailer = null;
-    if (session != null) {
-        retailer = (RetailerDTO) session.getAttribute("user");
-    }
-    if (retailer == null) {
+    if (session == null) {
         response.sendRedirect("login.jsp");
+        return;
+    }
+
+    Object user = session.getAttribute("user");
+
+    RetailerDTO retailer = null;
+    ConsumerDTO consumer = null;
+    CharitableDTO charitable = null;
+
+    if (user instanceof RetailerDTO) {
+        retailer = (RetailerDTO) user;
+    } else if (user instanceof ConsumerDTO) {
+        consumer = (ConsumerDTO) user;
+    } else if (user instanceof CharitableDTO){
+        charitable = (CharitableDTO) user;
+    }
+
+    if (retailer == null && consumer == null && charitable == null) {
+        response.sendRedirect("login.jsp");
+        return;
     }
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retailer Home - Taste-Not-Waste</title>
+    <title>Retailer Inventory - Taste-Not-Waste</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -90,36 +99,8 @@
 <body>
     <div class="container">
         <div class="retailer-info">
-            <h1>Welcome, <%= retailer.getRetailerName() %>!</h1>
-            <table>
-                <tr>
-                    <th>Retailer ID</th>
-                    <td><%= retailer.getRetailerId() %></td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <td><%= retailer.getRetailerName() %></td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td><%= retailer.getRetailerEmail() %></td>
-                </tr>
-                <tr>
-                    <th>Password</th>
-                    <td>********</td> <!-- Masked password for security -->
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td><%= retailer.getRetailerDescription() %></td>
-                </tr>
-            </table>
             <p><a href="Home.jsp">Go Home</a></p>
             <p><a href="AddItem.jsp">List an Item</a></p>
-            <p><a href="addNewsletter.jsp">Create Newsletter</a></p>
-            <form action="RetailerServlet" method="post">
-                <input type="hidden" name="retailer_id" value="<%= retailer.getRetailerId() %>">
-                <button type="submit">View Items</button>
-            </form>
         </div>
         <div class="item-list">
             <h2>Your Items</h2>
@@ -131,6 +112,7 @@
                     <th>Price</th>
                     <th>Expiry Date</th>
                     <th>Quantity</th>
+                    <th>Action</th>
                 </tr>
                 <%
                     List<InventoryDTO> items = (List<InventoryDTO>) request.getAttribute("items");
@@ -144,13 +126,25 @@
                                 <td><%= item.getPrice() %></td>
                                 <td><%= item.getExpiryDate() %></td>
                                 <td><%= item.getQuantity() %></td>
+                                <td>
+                                    <form action="ClaimOrPurchaseServlet" method="post">
+                                        <input type="hidden" name="item_id" value="<%= item.getItemId() %>">
+                                        <input type="number" name="quantity" min="1" max="<%= item.getQuantity() %>" required>
+                                        <% if (consumer != null) { %>
+                                            <button type="submit" name="action" value="purchase">Purchase</button>
+                                        <% } %>
+                                        <% if (charitable != null) { %>
+                                            <button type="submit" name="action" value="claim">Claim</button>
+                                        <% } %>
+                                    </form>
+                                </td>
                             </tr>
                 <%
                         }
                     } else {
                 %>
                         <tr>
-                            <td colspan="6">No items found in the inventory.</td>
+                            <td colspan="7">No items found in the inventory.</td>
                         </tr>
                 <%
                     }
@@ -160,4 +154,3 @@
     </div>
 </body>
 </html>
-</f:view>

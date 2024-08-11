@@ -1,9 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
+<%-- 
+    Document   : RetailerHome
+    Created on : Aug. 6, 2024, 3:29:09 p.m.
+    Author     : mylen
+--%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="DataAccess.ConsumerDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="DataAccess.*" %>
+
 <%
     ConsumerDTO consumer = null;
     if (session != null) {
@@ -75,19 +82,19 @@
 <body>
     <f:view>
         <div class="container">
-    <h1>Welcome, <%= consumer.getConsumerName() %>!</h1>
+            <h1>Welcome, <%= consumer.getConsumerName() %>!</h1>
             <table>
                 <tr>
                     <th>Consumer ID</th>
-                    <td><h:outputText value="${consumerBean.consumerId}"/></td>
+                    <td><%= consumer.getConsumerId() %></td>
                 </tr>
                 <tr>
                     <th>Name</th>
-                    <td><h:outputText value="${consumer_name}"/></td>
+                    <td><%= consumer.getConsumerName() %></td>
                 </tr>
                 <tr>
                     <th>Email</th>
-                    <td><h:outputText value="${consumerBean.consumerEmail}"/></td>
+                    <td><%= consumer.getConsumerEmail() %></td>
                 </tr>
                 <tr>
                     <th>Password</th>
@@ -95,15 +102,49 @@
                 </tr>
                 <tr>
                     <th>Newsletter Subscriber</th>
-                    <td><h:outputText value="${consumerBean.newsletterSubscriber ? 'Yes' : 'No'}"/></td>
-                </tr>
-                <tr>
-                    <th>Claim History</th>
-                    <td><h:outputText value="${consumerBean.claimHistory}"/></td>
+                    <td><%= consumer.getSubscriber() %></td>
                 </tr>
             </table>
-            <p><a href="ConsumerHome.jsp">Go Home</a></p>
+            <p><a href="Home.jsp">Go Home</a></p>
+            <form action="DisplayPurchasedItemsServlet" method="get">
+            <input type="hidden" name="consumer_id" value="<%= consumer.getConsumerId() %>">
+            <button type="submit">View Items</button>
+        </form>
+
+        <!-- Display Claimed Items -->
+        <div class="item-list">
+            
+    <h2>Purchased Items</h2>
+    <table border="1">
+        <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Quantity</th>
+        </tr>
+        <%
+            List<PurchaseItemDTO> purchasedItems = (List<PurchaseItemDTO>) request.getAttribute("purchasedItems");
+            if (purchasedItems != null) {
+                for (PurchaseItemDTO purchaseItem : purchasedItems) {
+                    InventoryDTO item = (InventoryDTO) request.getAttribute("item_" + purchaseItem.getItemId());
+                    if (item != null) {
+        %>
+        <tr>
+            <td><%= purchaseItem.getItemId() %></td>
+            <td><%= item.getItemName() %></td>
+            <td><%= purchaseItem.getQuantity() %></td>
+        </tr>
+        <%
+                    }
+                }
+            } else {
+        %>
+        <tr>
+            <td colspan="3">No items claimed.</td>
+        </tr>
+        <%
+            }
+        %>
+            </div>
         </div>
-    </f:view>
-</body>
+    </body>
 </html>

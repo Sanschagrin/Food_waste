@@ -10,10 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/RetailerServlet")
-public class RetailerServlet extends HttpServlet {
+@WebServlet("/ViewRetailerServlet")
+public class ViewRetailerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response);
+    }
+
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Fetch retailer information
             String retailerIdParam = request.getParameter("retailer_id");
@@ -30,11 +39,11 @@ public class RetailerServlet extends HttpServlet {
             List<InventoryDTO> items = inventoryDAO.getItemsByRetailerId(retailerId); // Fetch items for the specific retailer
             request.setAttribute("items", items);
 
-            request.getRequestDispatcher("RetailerHome.jsp").forward(request, response);
+            request.getRequestDispatcher("RetailerInventory.jsp").forward(request, response);
         } catch (SQLException | ClassNotFoundException | NumberFormatException e) {
             e.printStackTrace();
             request.setAttribute("error", "Error retrieving data: " + e.getMessage());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.getRequestDispatcher("Failed.jsp").forward(request, response);
         }
     }
 }

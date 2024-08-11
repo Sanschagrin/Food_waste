@@ -24,22 +24,29 @@ public class NewsletterDAOImpl implements NewsletterDAO{
 
     private static final String all = "SELECT * FROM Newsletter";
     private static final String byID = "SELECT * FROM Newsletter WHERE newsletter_id = ?";
-    private static final String insert = "INSERT INTO Newsletter (newsletter_id, newsletter_name, newsletter_article, item_id, sale) VALUES (?, ?, ?, ?, ?)";
-    private static final String update = "UPDATE Newsletter SET newsletter_id = ?, newsletter_name = ?, newsletter_article = ?, item_id = ?, sale = ? WHERE newsletter_id = ?";
+    private static final String insert = "INSERT INTO Newsletter (newsletter_name, newsletter_article, item_id, sale_price, uploadDate) VALUES (?, ?, ?, ?, ?)";
+    private static final String update = "UPDATE Newsletter SET newsletter_id = ?, newsletter_name = ?, newsletter_article = ?, item_id = ?, sale_price = ? WHERE newsletter_id = ?";
     private static final String delete = "DELETE FROM Newsletter WHERE newsletter_id = ?";
+    private static final String allSortedByDate = "SELECT * FROM Newsletter ORDER BY uploadDate DESC";
 
-    @Override
-    public List<NewsletterDTO> getAllNewsletters() throws SQLException {
-        List<NewsletterDTO> newsletter = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(all)) {
-            ResultSet results = preparedStatement.executeQuery();
-            while (results.next()) {
-                newsletter.add(new NewsletterDTO(results.getInt("newsletter_id"), results.getString("newsletter_name"), results.getString("newsletter_article"), results.getInt("item_id"), results.getDouble("sale")));
-            }
+@Override
+public List<NewsletterDTO> getAllNewsletters() throws SQLException {
+    List<NewsletterDTO> newsletters = new ArrayList<>();
+    try (PreparedStatement preparedStatement = connection.prepareStatement(allSortedByDate)) {
+        ResultSet results = preparedStatement.executeQuery();
+        while (results.next()) {
+            newsletters.add(new NewsletterDTO(
+                results.getInt("newsletter_id"),
+                results.getString("newsletter_name"),
+                results.getString("newsletter_article"),
+                results.getInt("item_id"),
+                results.getDouble("sale_price"),
+                results.getDate("uploadDate")
+            ));
         }
-        return newsletter;
     }
-
+    return newsletters;
+}
     @Override
     public NewsletterDTO getNewsletterById(int newsletter_id) throws SQLException {
         NewsletterDTO newsletter = null;
@@ -47,7 +54,7 @@ public class NewsletterDAOImpl implements NewsletterDAO{
             preparedStatement.setInt(1, newsletter_id);
             try(ResultSet results = preparedStatement.executeQuery()){
             if (results.next()) {
-                return new NewsletterDTO(results.getInt("newsletter_id"), results.getString("newsletter_name"), results.getString("newsletter_article"), results.getInt("item_id"), results.getDouble("sale"));
+                return new NewsletterDTO(results.getInt("newsletter_id"), results.getString("newsletter_name"), results.getString("newsletter_article"), results.getInt("item_id"), results.getDouble("sale_price"), results.getDate("uploadDate"));
             }
             }
         }
@@ -61,6 +68,7 @@ public class NewsletterDAOImpl implements NewsletterDAO{
             preparedStatement.setString(2, newsletter.getNewsletterArticle());
             preparedStatement.setInt(3, newsletter.getItemId());
             preparedStatement.setDouble(4, newsletter.getSale());
+            preparedStatement.setDate(5, new java.sql.Date(newsletter.getUploadDate().getTime()));
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Added newsletter: " + newsletter);
@@ -77,6 +85,7 @@ public class NewsletterDAOImpl implements NewsletterDAO{
             preparedStatement.setString(2, newsletter.getNewsletterArticle());
             preparedStatement.setInt(3, newsletter.getItemId());
             preparedStatement.setDouble(4, newsletter.getSale());
+            preparedStatement.setDate(5, newsletter.getUploadDate());
             preparedStatement.executeUpdate();
         }
     }

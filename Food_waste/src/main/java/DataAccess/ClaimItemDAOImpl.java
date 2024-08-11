@@ -121,7 +121,7 @@ public class ClaimItemDAOImpl implements ClaimItemDAO {
                     int itemId = rs.getInt("item_id");
                     int quantity = rs.getInt("quantity");
                     
-                    ClaimItemDTO claimItem = new ClaimItemDTO();
+                    ClaimItemDTO claimItem = new ClaimItemDTO(1, 1,1);
                     claimItem.setItemId(itemId);
                     claimItem.setQuantity(quantity);
                     

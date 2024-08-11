@@ -1,22 +1,65 @@
-<%-- 
-    Document   : Failed
-    Created on : Aug. 4, 2024, 12:43:01 p.m.
-    Author     : ggreg
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-
-<f:view>
-    <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-            <title>Process Failed</title>
-        </head>
-        <body>
-            <h1><h:outputText value="An Error has been encountered"/></h1>
-            <p>There was an error processing your request. Please try again later.</p>
-        </body>
-    </html>
-</f:view>
+<%@page import="java.util.Arrays"%>
+<%@ page isErrorPage="true" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Taste-Not-Waste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7da;
+            color: #721c24;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border: 1px solid #f5c6cb;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+        }
+        h2 {
+            color: #721c24;
+        }
+        p {
+            margin: 10px 0;
+        }
+        pre {
+            background-color: #f5c6cb;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            overflow: auto;
+        }
+        a {
+            color: #004085;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Oops! Something went wrong.</h2>
+        <p>We encountered an unexpected error while processing your request. Please try again later or contact support if the problem persists.</p>
+        <p><strong>Error Details:</strong></p>
+        <p><%= (exception != null) ? exception.getMessage() : "No error message available." %></p>
+        <p><strong>Stack Trace:</strong></p>
+        <pre><%= (exception != null) ? Arrays.toString(exception.getStackTrace()) : "No stack trace available." %></pre>
+        <p><a href="Home.jsp">Go back to home page</a></p>
+    </div>
+</body>
+</html>
