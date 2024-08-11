@@ -1,3 +1,4 @@
+
 import DataAccess.ConsumerDAOImpl;
 import DataAccess.ConsumerDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,10 @@ public class ConsumerDAOImplTest {
     private Connection connection;
     private ConsumerDAOImpl consumerDAO;
 
+    /**
+     *
+     * @throws SQLException
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         // Set up the in-memory database
@@ -25,10 +30,10 @@ public class ConsumerDAOImplTest {
         try (Statement stmt = connection.createStatement()) {
             // Drop table if it exists to avoid conflicts
             stmt.execute("DROP TABLE IF EXISTS Consumers");
-            
+
             // Create the table with AUTO_INCREMENT for the primary key
             stmt.execute("CREATE TABLE Consumers (consumer_id INT AUTO_INCREMENT PRIMARY KEY, consumer_name VARCHAR(255), consumer_email VARCHAR(255), consumer_password VARCHAR(255), subscriber BOOLEAN)");
-            
+
             // Insert initial data
             stmt.execute("INSERT INTO Consumers (consumer_name, consumer_email, consumer_password, subscriber) VALUES ('Test Consumer', 'test@example.com', 'password123', true)");
         }
@@ -37,6 +42,10 @@ public class ConsumerDAOImplTest {
         consumerDAO = new ConsumerDAOImpl(connection);
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetAllConsumers() throws SQLException {
         List<ConsumerDTO> consumers = consumerDAO.getAllConsumers();
@@ -53,6 +62,10 @@ public class ConsumerDAOImplTest {
         System.out.println("Consumer : Getting all consumers passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetConsumerById() throws SQLException {
         ConsumerDTO consumer = consumerDAO.getConsumerById(1);
@@ -62,6 +75,10 @@ public class ConsumerDAOImplTest {
         System.out.println("Consumer : Test to get by ID passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testAddConsumer() throws SQLException {
         ConsumerDTO consumer = new ConsumerDTO(0, "New Consumer", "new@example.com", "newpassword", false); // Use 0 for auto-generated ID
@@ -75,7 +92,10 @@ public class ConsumerDAOImplTest {
         System.out.println("Consumer : Adding consumer passed");
     }
 
-
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testDeleteConsumer() throws SQLException {
         ConsumerDTO consumer = new ConsumerDTO(1, "Test Consumer", "test@example.com", "password123", true);

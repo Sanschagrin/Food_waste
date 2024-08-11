@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DataAccess;
 
 import java.sql.Connection;
@@ -16,10 +12,16 @@ import java.util.List;
  * @author ggreg
  */
 public class EventsDAOImpl implements EventsDAO {
+
     private static Connection connection;
-    
+
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public EventsDAOImpl() throws SQLException, ClassNotFoundException {
-    this.connection = DBConnection.getConnection();
+        this.connection = DBConnection.getConnection();
     }
 
     private static final String all = "SELECT * FROM Events";
@@ -28,6 +30,11 @@ public class EventsDAOImpl implements EventsDAO {
     private static final String update = "UPDATE Events SET event_name = ?, event_description = ?, event_attendees = ? WHERE charitable_id = ?";
     private static final String delete = "DELETE FROM Events WHERE event_id = ?";
 
+    /**
+     *
+     * @return List<EventsDTO>
+     * @throws SQLException
+     */
     @Override
     public List<EventsDTO> getAllEvents() throws SQLException {
         List<EventsDTO> events = new ArrayList<>();
@@ -40,20 +47,31 @@ public class EventsDAOImpl implements EventsDAO {
         return events;
     }
 
+    /**
+     *
+     * @param event_id
+     * @return EventsDTO
+     * @throws SQLException
+     */
     @Override
     public EventsDTO getEventById(int event_id) throws SQLException {
         EventsDTO events = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(byID)) {
             preparedStatement.setInt(1, event_id);
-            try(ResultSet results = preparedStatement.executeQuery()){
-            if (results.next()) {
-                return new EventsDTO(results.getInt("event_id"), results.getString("event_name"), results.getString("event_description"), results.getInt("event_attendees"));
-            }
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                if (results.next()) {
+                    return new EventsDTO(results.getInt("event_id"), results.getString("event_name"), results.getString("event_description"), results.getInt("event_attendees"));
+                }
             }
         }
         return events;
     }
 
+    /**
+     *
+     * @param event
+     * @throws SQLException
+     */
     @Override
     public void addEvent(EventsDTO event) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
@@ -66,9 +84,14 @@ public class EventsDAOImpl implements EventsDAO {
             } else {
                 System.out.println("Failed to add event: " + event);
             }
-    }
+        }
     }
 
+    /**
+     *
+     * @param event
+     * @throws SQLException
+     */
     @Override
     public void updateEvent(EventsDTO event) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(update)) {
@@ -80,6 +103,11 @@ public class EventsDAOImpl implements EventsDAO {
         }
     }
 
+    /**
+     *
+     * @param event
+     * @throws SQLException
+     */
     @Override
     public void deleteEvent(EventsDTO event) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(delete)) {
@@ -89,4 +117,3 @@ public class EventsDAOImpl implements EventsDAO {
     }
 
 }
-

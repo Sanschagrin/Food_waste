@@ -1,3 +1,4 @@
+
 import DataAccess.CharitableDAOImpl;
 import DataAccess.CharitableDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,10 @@ public class CharitableDAOImplTest {
     private Connection connection;
     private CharitableDAOImpl charitableDAO;
 
+    /**
+     *
+     * @throws SQLException
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         // Set up the in-memory database or use an actual database for tests
@@ -25,10 +30,10 @@ public class CharitableDAOImplTest {
         try (Statement stmt = connection.createStatement()) {
             // Drop table if it exists to avoid conflicts
             stmt.execute("DROP TABLE IF EXISTS charitable");
-            
+
             // Create the table with AUTO_INCREMENT for the primary key
             stmt.execute("CREATE TABLE charitable (charitable_id INT AUTO_INCREMENT PRIMARY KEY, charitable_name VARCHAR(255), charitable_email VARCHAR(255), charitable_password VARCHAR(255), charitable_description VARCHAR(255))");
-            
+
             // Insert initial data
             stmt.execute("INSERT INTO charitable (charitable_name, charitable_email, charitable_password, charitable_description) VALUES ('Test Charity', 'test@example.com', 'password123', 'Test Description')");
         }
@@ -37,6 +42,10 @@ public class CharitableDAOImplTest {
         charitableDAO = new CharitableDAOImpl(connection);
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetAllCharitable() throws SQLException {
         List<CharitableDTO> charitables = charitableDAO.getAllCharitable();
@@ -49,10 +58,14 @@ public class CharitableDAOImplTest {
         assertEquals("test@example.com", charitable.getCharitableEmail());
         assertEquals("password123", charitable.getCharitablePassword());
         assertEquals("Test Description", charitable.getCharitableDescription());
-        
+
         System.out.println("Charitable : Getting all charitables Pass");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetCharitableById() throws SQLException {
         CharitableDTO charitable = charitableDAO.getCharitableById(1);
@@ -62,6 +75,10 @@ public class CharitableDAOImplTest {
         System.out.println("Charitable : Test to get Id passsed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testAddCharitable() throws SQLException {
         CharitableDTO charitable = new CharitableDTO(0, "New Charity", "new@example.com", "newpassword", "New Description"); // Use 0 for auto-generated ID
@@ -75,6 +92,10 @@ public class CharitableDAOImplTest {
         System.out.println("Charitable : Adding charitable passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testUpdateCharitable() throws SQLException {
         CharitableDTO charitable = new CharitableDTO(1, "Updated Charity", "updated@example.com", "newpassword", "Updated Description");
@@ -87,6 +108,10 @@ public class CharitableDAOImplTest {
         System.out.println("Charitable : Updating Charitable passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testDeleteCharitable() throws SQLException {
         CharitableDTO charitable = new CharitableDTO(1, "Test Charity", "test@example.com", "password123", "Test Description");

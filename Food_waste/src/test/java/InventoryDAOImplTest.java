@@ -1,3 +1,4 @@
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import DataAccess.InventoryDAOImpl;
@@ -16,6 +17,10 @@ public class InventoryDAOImplTest {
     private Connection connection;
     private InventoryDAOImpl inventoryDAO;
 
+    /**
+     *
+     * @throws SQLException
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         // Set up the in-memory database
@@ -25,26 +30,30 @@ public class InventoryDAOImplTest {
         try (Statement stmt = connection.createStatement()) {
             // Drop table if it exists to avoid conflicts
             stmt.execute("DROP TABLE IF EXISTS inventory");
-            
+
             // Create the table with AUTO_INCREMENT for the primary key
-            stmt.execute("CREATE TABLE inventory (" +
-                    "item_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                    "retailer_id INT, " +
-                    "item_name VARCHAR(255), " +
-                    "item_description VARCHAR(255), " +
-                    "price DOUBLE, " +
-                    "expiry_date DATE, " +
-                    "quantity INT)");
-            
+            stmt.execute("CREATE TABLE inventory ("
+                    + "item_id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "retailer_id INT, "
+                    + "item_name VARCHAR(255), "
+                    + "item_description VARCHAR(255), "
+                    + "price DOUBLE, "
+                    + "expiry_date DATE, "
+                    + "quantity INT)");
+
             // Insert initial data
-            stmt.execute("INSERT INTO inventory (retailer_id, item_name, item_description, price, expiry_date, quantity) " +
-                    "VALUES (101, 'Item1', 'Description1', 10.0, '2024-12-31', 100)");
+            stmt.execute("INSERT INTO inventory (retailer_id, item_name, item_description, price, expiry_date, quantity) "
+                    + "VALUES (101, 'Item1', 'Description1', 10.0, '2024-12-31', 100)");
         }
 
         // Initialize DAO with the connection
         inventoryDAO = new InventoryDAOImpl(connection);
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetAllItems() throws SQLException {
         List<InventoryDTO> items = inventoryDAO.getAllItems();
@@ -63,6 +72,10 @@ public class InventoryDAOImplTest {
         System.out.println("Inventory : Getting all items Passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetItemById() throws SQLException {
         InventoryDTO item = inventoryDAO.getItemById(1);
@@ -72,6 +85,10 @@ public class InventoryDAOImplTest {
         System.out.println("Inventory : Get item by ID Passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testAddItem() throws SQLException {
         InventoryDTO newItem = new InventoryDTO(0, 102, "NewItem", "NewDescription", 20.0, Date.valueOf("2025-01-01"), 50); // Use 0 for auto-generated ID
@@ -85,6 +102,10 @@ public class InventoryDAOImplTest {
         System.out.println("Inventory : Adding item Passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testUpdateItem() throws SQLException {
         InventoryDTO updatedItem = new InventoryDTO(1, 101, "UpdatedItem", "UpdatedDescription", 30.0, Date.valueOf("2025-02-01"), 75);
@@ -97,6 +118,10 @@ public class InventoryDAOImplTest {
         System.out.println("Inventory : Updating item Passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testDeleteItem() throws SQLException {
         inventoryDAO.deleteItem(1);
@@ -106,6 +131,10 @@ public class InventoryDAOImplTest {
         System.out.println("Inventory : Deleting item Passed");
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Test
     public void testGetItemsByRetailerId() throws SQLException {
         List<InventoryDTO> items = inventoryDAO.getItemsByRetailerId(101);

@@ -8,30 +8,43 @@ public class InventoryDAOImpl implements InventoryDAO {
 
     private Connection connection;
 
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public InventoryDAOImpl() throws SQLException, ClassNotFoundException {
         // Initialize database connection
         connection = DBConnection.getConnection();
     }
-    
-     // Constructor with Connection parameter
+
+    /**
+     * Constructor with Connection parameter
+     *
+     * @param connection
+     */
     public InventoryDAOImpl(Connection connection) {
         this.connection = connection;
     }
+
+    /**
+     *
+     * @return @throws SQLException
+     */
     @Override
     public List<InventoryDTO> getAllItems() throws SQLException {
         List<InventoryDTO> items = new ArrayList<>();
         String query = "SELECT * FROM inventory";
-        try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 InventoryDTO item = new InventoryDTO(
-                    rs.getInt("item_id"),
-                    rs.getInt("retailer_id"),
-                    rs.getString("item_name"),
-                    rs.getString("item_description"),
-                    rs.getDouble("price"),
-                    rs.getDate("expiry_date"),
-                    rs.getInt("quantity")
+                        rs.getInt("item_id"),
+                        rs.getInt("retailer_id"),
+                        rs.getString("item_name"),
+                        rs.getString("item_description"),
+                        rs.getDouble("price"),
+                        rs.getDate("expiry_date"),
+                        rs.getInt("quantity")
                 );
                 items.add(item);
             }
@@ -39,6 +52,12 @@ public class InventoryDAOImpl implements InventoryDAO {
         return items;
     }
 
+    /**
+     *
+     * @param item_id
+     * @return InventoryDTO
+     * @throws SQLException
+     */
     @Override
     public InventoryDTO getItemById(int item_id) throws SQLException {
         String query = "SELECT * FROM inventory WHERE item_id = ?";
@@ -47,13 +66,13 @@ public class InventoryDAOImpl implements InventoryDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new InventoryDTO(
-                        rs.getInt("item_id"),
-                        rs.getInt("retailer_id"),
-                        rs.getString("item_name"),
-                        rs.getString("item_description"),
-                        rs.getDouble("price"),
-                        rs.getDate("expiry_date"),
-                        rs.getInt("quantity")
+                            rs.getInt("item_id"),
+                            rs.getInt("retailer_id"),
+                            rs.getString("item_name"),
+                            rs.getString("item_description"),
+                            rs.getDouble("price"),
+                            rs.getDate("expiry_date"),
+                            rs.getInt("quantity")
                     );
                 }
             }
@@ -61,6 +80,11 @@ public class InventoryDAOImpl implements InventoryDAO {
         return null;
     }
 
+    /**
+     *
+     * @param item
+     * @throws SQLException
+     */
     @Override
     public void addItem(InventoryDTO item) throws SQLException {
         String query = "INSERT INTO inventory (retailer_id, item_name, item_description, price, expiry_date, quantity) VALUES (?, ?, ?, ?, ?, ?)";
@@ -75,6 +99,11 @@ public class InventoryDAOImpl implements InventoryDAO {
         }
     }
 
+    /**
+     *
+     * @param item
+     * @throws SQLException
+     */
     @Override
     public void updateItem(InventoryDTO item) throws SQLException {
         String query = "UPDATE inventory SET retailer_id = ?, item_name = ?, item_description = ?, price = ?, expiry_date = ?, quantity = ? WHERE item_id = ?";
@@ -90,6 +119,11 @@ public class InventoryDAOImpl implements InventoryDAO {
         }
     }
 
+    /**
+     *
+     * @param item_id
+     * @throws SQLException
+     */
     @Override
     public void deleteItem(int item_id) throws SQLException {
         String query = "DELETE FROM inventory WHERE item_id = ?";
@@ -99,6 +133,12 @@ public class InventoryDAOImpl implements InventoryDAO {
         }
     }
 
+    /**
+     *
+     * @param retailerId
+     * @return List<InventoryDTO>
+     * @throws SQLException
+     */
     @Override
     public List<InventoryDTO> getItemsByRetailerId(int retailerId) throws SQLException {
         List<InventoryDTO> items = new ArrayList<>();
@@ -108,13 +148,13 @@ public class InventoryDAOImpl implements InventoryDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     InventoryDTO item = new InventoryDTO(
-                        rs.getInt("item_id"),
-                        rs.getInt("retailer_id"),
-                        rs.getString("item_name"),
-                        rs.getString("item_description"),
-                        rs.getDouble("price"),
-                        rs.getDate("expiry_date"),
-                        rs.getInt("quantity")
+                            rs.getInt("item_id"),
+                            rs.getInt("retailer_id"),
+                            rs.getString("item_name"),
+                            rs.getString("item_description"),
+                            rs.getDouble("price"),
+                            rs.getDate("expiry_date"),
+                            rs.getInt("quantity")
                     );
                     items.add(item);
                 }

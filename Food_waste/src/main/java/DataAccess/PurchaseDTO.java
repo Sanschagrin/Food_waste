@@ -1,9 +1,16 @@
 package DataAccess;
 
 public class PurchaseDTO {
+
     private int purchaseId;
     private int consumerId;
 
+    /**
+     * parameterized Constructor
+     *
+     * @param purchaseId
+     * @param consumerId
+     */
     public PurchaseDTO(int purchaseId, int consumerId) {
         this.purchaseId = purchaseId;
         this.consumerId = consumerId;

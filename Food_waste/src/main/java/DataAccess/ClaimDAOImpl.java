@@ -10,17 +10,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author mylen
  */
 
 public class ClaimDAOImpl implements ClaimDAO {
+
     private Connection connection;
 
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public ClaimDAOImpl() throws SQLException, ClassNotFoundException {
         connection = DBConnection.getConnection();
     }
+
+    /**
+     *
+     * @param claim
+     * @return ClaimDTO claim
+     * @throws SQLException
+     */
 
     @Override
     public int addClaim(ClaimDTO claim) throws SQLException {
@@ -43,11 +57,15 @@ public class ClaimDAOImpl implements ClaimDAO {
         }
     }
 
+    /**
+     *
+     * @return List<ClaimDTO>
+     * @throws SQLException
+     */
     @Override
     public List<ClaimDTO> getAllClaims() throws SQLException {
         String sql = "SELECT claim_id, charitable_id FROM claims";
-        try (PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement(sql); ResultSet resultSet = statement.executeQuery()) {
 
             List<ClaimDTO> claims = new ArrayList<>();
             while (resultSet.next()) {
@@ -60,6 +78,12 @@ public class ClaimDAOImpl implements ClaimDAO {
         }
     }
 
+    /**
+     *
+     * @param claim_id
+     * @return
+     * @throws SQLException
+     */
     @Override
     public ClaimDTO getClaimById(int claim_id) throws SQLException {
         String sql = "SELECT claim_id, charitable_id FROM claims WHERE claim_id = ?";
@@ -77,6 +101,11 @@ public class ClaimDAOImpl implements ClaimDAO {
         }
     }
 
+    /**
+     *
+     * @param claim
+     * @throws SQLException
+     */
     @Override
     public void updateClaim(ClaimDTO claim) throws SQLException {
         String sql = "UPDATE claims SET charitable_id = ? WHERE claim_id = ?";
@@ -87,6 +116,12 @@ public class ClaimDAOImpl implements ClaimDAO {
         }
     }
 
+    /**
+     *
+     * @param claimId
+     * @throws SQLException
+     */
+
     @Override
     public void deleteClaim(int claimId) throws SQLException {
         String sql = "DELETE FROM claims WHERE claim_id = ?";
@@ -95,7 +130,7 @@ public class ClaimDAOImpl implements ClaimDAO {
             statement.executeUpdate();
         }
     }
-    
+
     /**
      *
      * @param charitableId
@@ -103,13 +138,13 @@ public class ClaimDAOImpl implements ClaimDAO {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-       @Override
+    @Override
     public List<ClaimItemDTO> getClaimItemsByCharitableId(int charitableId) throws SQLException, ClassNotFoundException {
         List<ClaimItemDTO> claimedItems = new ArrayList<>();
-        String query = "SELECT ci.claim_id, ci.item_id, ci.quantity " +
-                       "FROM claim_items ci " +
-                       "JOIN claims c ON ci.claim_id = c.claim_id " +
-                       "WHERE c.charitable_id = ?";
+        String query = "SELECT ci.claim_id, ci.item_id, ci.quantity "
+                + "FROM claim_items ci "
+                + "JOIN claims c ON ci.claim_id = c.claim_id "
+                + "WHERE c.charitable_id = ?";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, charitableId);
@@ -126,6 +161,4 @@ public class ClaimDAOImpl implements ClaimDAO {
         return claimedItems;
     }
 
-
 }
-

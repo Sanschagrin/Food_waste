@@ -17,9 +17,14 @@ import java.sql.SQLException;
 
 @WebServlet("/addNewsletterServlet")
 public class AddNewsletterServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private NewsletterDAO newsletterDAO;
 
+    /**
+     *
+     * @throws ServletException
+     */
     @Override
     public void init() throws ServletException {
         try {
@@ -29,12 +34,26 @@ public class AddNewsletterServlet extends HttpServlet {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("addNewsletter.jsp").forward(request, response);
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

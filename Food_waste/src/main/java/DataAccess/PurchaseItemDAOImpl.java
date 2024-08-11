@@ -5,15 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseItemDAOImpl implements PurchaseItemDAO {
+
     private Connection connection;
 
     private static final String INSERT_PURCHASE_ITEM_SQL = "INSERT INTO purchase_items (purchase_id, item_id, quantity) VALUES (?, ?, ?)";
     private static final String SELECT_PURCHASE_ITEMS_BY_PURCHASE_ID_SQL = "SELECT * FROM purchase_items WHERE purchase_id = ?";
     private static final String SELECT_PURCHASE_ITEM_BY_ID_SQL = "SELECT * FROM purchase_items WHERE purchase_item_id = ?";
 
-        public PurchaseItemDAOImpl() throws SQLException, ClassNotFoundException {
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public PurchaseItemDAOImpl() throws SQLException, ClassNotFoundException {
         connection = DBConnection.getConnection();
     }
+
+    /**
+     *
+     * @param purchaseItem
+     * @throws SQLException
+     */
     @Override
     public void addPurchaseItem(PurchaseItemDTO purchaseItem) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PURCHASE_ITEM_SQL)) {
@@ -24,6 +36,12 @@ public class PurchaseItemDAOImpl implements PurchaseItemDAO {
         }
     }
 
+    /**
+     *
+     * @param purchaseId
+     * @return List<PurchaseItemDTO>
+     * @throws SQLException
+     */
     @Override
     public List<PurchaseItemDTO> getPurchaseItemsByPurchaseId(int purchaseId) throws SQLException {
         List<PurchaseItemDTO> purchaseItems = new ArrayList<>();
@@ -40,6 +58,12 @@ public class PurchaseItemDAOImpl implements PurchaseItemDAO {
         return purchaseItems;
     }
 
+    /**
+     *
+     * @param purchaseItemId
+     * @return PurchaseItemDTO
+     * @throws SQLException
+     */
     @Override
     public PurchaseItemDTO getPurchaseItemById(int purchaseItemId) throws SQLException {
         PurchaseItemDTO purchaseItem = null;

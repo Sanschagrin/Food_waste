@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseDAOImpl implements PurchaseDAO {
+
     private Connection connection;
 
     private static final String INSERT_PURCHASE_SQL = "INSERT INTO purchases (consumer_id, purchase_date) VALUES (?, ?)";
@@ -12,10 +13,21 @@ public class PurchaseDAOImpl implements PurchaseDAO {
     private static final String SELECT_PURCHASE_ITEMS_BY_CONSUMER_ID_SQL = "SELECT * FROM purchase_items WHERE purchase_id IN (SELECT purchase_id FROM purchases WHERE consumer_id = ?)";
     private static final String SELECT_PURCHASE_BY_ID_SQL = "SELECT * FROM purchases WHERE purchase_id = ?";
 
-        public PurchaseDAOImpl() throws SQLException, ClassNotFoundException {
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public PurchaseDAOImpl() throws SQLException, ClassNotFoundException {
         connection = DBConnection.getConnection();
     }
-    
+
+    /**
+     *
+     * @param purchase
+     * @return
+     * @throws SQLException
+     */
     @Override
     public int addPurchase(PurchaseDTO purchase) throws SQLException {
         String sql = "INSERT INTO purchases (consumer_id) VALUES (?)";
@@ -36,6 +48,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
             }
         }
     }
+
+    /**
+     *
+     * @param purchase
+     * @throws SQLException
+     */
     @Override
     public void createPurchase(PurchaseDTO purchase) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PURCHASE_SQL)) {
@@ -44,6 +62,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
         }
     }
 
+    /**
+     *
+     * @param consumerId
+     * @return List<PurchaseDTO>
+     * @throws SQLException
+     */
     @Override
     public List<PurchaseDTO> getPurchasesByConsumerId(int consumerId) throws SQLException {
         List<PurchaseDTO> purchases = new ArrayList<>();
@@ -58,6 +82,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
         return purchases;
     }
 
+    /**
+     *
+     * @param consumerId
+     * @return List<PurchaseDTO>
+     * @throws SQLException
+     */
     @Override
     public List<PurchaseItemDTO> getPurchaseItemsByConsumerId(int consumerId) throws SQLException {
         List<PurchaseItemDTO> purchaseItems = new ArrayList<>();
@@ -74,6 +104,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
         return purchaseItems;
     }
 
+    /**
+     *
+     * @param purchaseId
+     * @return PurchaseDTO
+     * @throws SQLException
+     */
     @Override
     public PurchaseDTO getPurchaseById(int purchaseId) throws SQLException {
         PurchaseDTO purchase = null;

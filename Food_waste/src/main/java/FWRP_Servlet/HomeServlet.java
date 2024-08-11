@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FWRP_Servlet;
 
 import DataAccess.ConsumerDTO;
@@ -27,23 +23,31 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/HomeServlet")
 public class HomeServlet extends HttpServlet {
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {    
+        try {
             HttpSession session = request.getSession();
             Object user = session.getAttribute("user");
-            
+
             if (user instanceof RetailerDTO) {
                 RetailerDAO retailerDAO = new RetailerDAOImpl();
                 List<RetailerDTO> retailers = retailerDAO.getAllRetailers();
                 request.setAttribute("retailers", retailers);
-                                NewsletterDAO newsletterDAO = new NewsletterDAOImpl();
+                NewsletterDAO newsletterDAO = new NewsletterDAOImpl();
                 List<NewsletterDTO> newsletters = newsletterDAO.getAllNewsletters();
                 request.setAttribute("newsletters", newsletters);
 
                 request.getRequestDispatcher("Home.jsp").forward(request, response);
-           // } else if (user instanceof ConsumerDTO) {
-               // request.getRequestDispatcher("consumerHome.jsp").forward(request, response);
+                // } else if (user instanceof ConsumerDTO) {
+                // request.getRequestDispatcher("consumerHome.jsp").forward(request, response);
             } else {
                 response.sendRedirect("login.jsp");
             }

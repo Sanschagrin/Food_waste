@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DataAccess;
 
 import java.sql.Connection;
@@ -15,11 +11,17 @@ import java.util.List;
  *
  * @author ggreg
  */
-public class RetailerDAOImpl implements RetailerDAO{
+public class RetailerDAOImpl implements RetailerDAO {
+
     private static Connection connection;
-    
+
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public RetailerDAOImpl() throws SQLException, ClassNotFoundException {
-    this.connection = DBConnection.getConnection();
+        this.connection = DBConnection.getConnection();
     }
 
     private static final String all = "SELECT * FROM Retailers";
@@ -29,6 +31,10 @@ public class RetailerDAOImpl implements RetailerDAO{
     private static final String delete = "DELETE FROM Retailers WHERE retailer_id = ?";
     private static final String authenticate = "SELECT * FROM Retailers WHERE retailer_email = ? AND retailer_password = ?";
 
+    /**
+     *
+     * @return @throws SQLException
+     */
     @Override
     public List<RetailerDTO> getAllRetailers() throws SQLException {
         List<RetailerDTO> consumers = new ArrayList<>();
@@ -41,20 +47,31 @@ public class RetailerDAOImpl implements RetailerDAO{
         return consumers;
     }
 
+    /**
+     *
+     * @param retailer_id
+     * @return RetailerDTO
+     * @throws SQLException
+     */
     @Override
     public RetailerDTO getRetailerById(int retailer_id) throws SQLException {
         RetailerDTO retailer = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(byID)) {
             preparedStatement.setInt(1, retailer_id);
-            try(ResultSet results = preparedStatement.executeQuery()){
-            if (results.next()) {
-                return new RetailerDTO(results.getInt("retailer_id"), results.getString("retailer_name"), results.getString("retailer_email"), results.getString("retailer_password"), results.getString("retailer_description"));
-            }
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                if (results.next()) {
+                    return new RetailerDTO(results.getInt("retailer_id"), results.getString("retailer_name"), results.getString("retailer_email"), results.getString("retailer_password"), results.getString("retailer_description"));
+                }
             }
         }
         return retailer;
     }
 
+    /**
+     *
+     * @param retailer
+     * @throws SQLException
+     */
     @Override
     public void addRetailer(RetailerDTO retailer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
@@ -68,9 +85,14 @@ public class RetailerDAOImpl implements RetailerDAO{
             } else {
                 System.out.println("Failed to add retailer: " + retailer);
             }
-    }
+        }
     }
 
+    /**
+     *
+     * @param retailer
+     * @throws SQLException
+     */
     @Override
     public void updateRetailer(RetailerDTO retailer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(update)) {
@@ -83,6 +105,11 @@ public class RetailerDAOImpl implements RetailerDAO{
         }
     }
 
+    /**
+     *
+     * @param retailer
+     * @throws SQLException
+     */
     @Override
     public void deleteRetailer(RetailerDTO retailer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(delete)) {
@@ -90,7 +117,15 @@ public class RetailerDAOImpl implements RetailerDAO{
             preparedStatement.executeUpdate();
         }
     }
-        @Override
+
+    /**
+     *
+     * @param retailer_name
+     * @param retailer_password
+     * @return RetailerDTO
+     * @throws SQLException
+     */
+    @Override
     public RetailerDTO getRetailerByUsernameAndPassword(String retailer_name, String retailer_password) throws SQLException {
         RetailerDTO retailer = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(authenticate)) {
@@ -99,15 +134,14 @@ public class RetailerDAOImpl implements RetailerDAO{
             ResultSet results = preparedStatement.executeQuery();
             if (results.next()) {
                 retailer = new RetailerDTO(
-                    results.getInt("retailer_id"),
-                    results.getString("retailer_name"),
-                    results.getString("retailer_email"),
-                    results.getString("retailer_password"),
-                    results.getString("retailer_description")
+                        results.getInt("retailer_id"),
+                        results.getString("retailer_name"),
+                        results.getString("retailer_email"),
+                        results.getString("retailer_password"),
+                        results.getString("retailer_description")
                 );
             }
         }
         return retailer;
     }
 }
-

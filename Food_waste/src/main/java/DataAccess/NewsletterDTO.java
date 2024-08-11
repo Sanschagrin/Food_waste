@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DataAccess;
 
 import java.sql.Date;
@@ -11,13 +7,24 @@ import java.sql.Date;
  * @author ggreg
  */
 public class NewsletterDTO {
+
     private int newsletter_id;
     private String newsletter_name;
     private String newsletter_article;
     private int item_id;
     private double sale_price;
-    private Date uploadDate; // Add this line
+    private Date uploadDate;
 
+    /**
+     * parameterized constructor
+     *
+     * @param newsletter_id
+     * @param newsletter_name
+     * @param newsletter_article
+     * @param item_id
+     * @param sale_price
+     * @param uploadDate
+     */
     public NewsletterDTO(int newsletter_id, String newsletter_name, String newsletter_article, int item_id, double sale_price, Date uploadDate) {
         this.newsletter_id = newsletter_id;
         this.newsletter_name = newsletter_name;

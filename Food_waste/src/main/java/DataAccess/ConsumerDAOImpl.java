@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DataAccess;
 
 import java.sql.Connection;
@@ -15,14 +11,24 @@ import java.util.List;
  *
  * @author ggreg
  */
-public class ConsumerDAOImpl implements ConsumerDAO{
+public class ConsumerDAOImpl implements ConsumerDAO {
+
     private Connection connection;
-    
+
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public ConsumerDAOImpl() throws SQLException, ClassNotFoundException {
-    this.connection = DBConnection.getConnection();
+        this.connection = DBConnection.getConnection();
     }
 
-     // Constructor with Connection parameter
+    /**
+     * Constructor with Connection parameter
+     *
+     * @param connection
+     */
     public ConsumerDAOImpl(Connection connection) {
         this.connection = connection;
     }
@@ -34,7 +40,10 @@ public class ConsumerDAOImpl implements ConsumerDAO{
     private static final String delete = "DELETE FROM Consumers WHERE consumer_id = ?";
     private static final String QUERY = "SELECT * FROM consumers WHERE username = ? AND password = ?";
 
-
+    /**
+     *
+     * @return @throws SQLException
+     */
     @Override
     public List<ConsumerDTO> getAllConsumers() throws SQLException {
         List<ConsumerDTO> consumers = new ArrayList<>();
@@ -47,20 +56,31 @@ public class ConsumerDAOImpl implements ConsumerDAO{
         return consumers;
     }
 
+    /**
+     *
+     * @param consumer_id
+     * @return
+     * @throws SQLException
+     */
     @Override
     public ConsumerDTO getConsumerById(int consumer_id) throws SQLException {
         ConsumerDTO consumers = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(byID)) {
             preparedStatement.setInt(1, consumer_id);
-            try(ResultSet results = preparedStatement.executeQuery()){
-            if (results.next()) {
-                return new ConsumerDTO(results.getInt("consumer_id"), results.getString("consumer_name"), results.getString("consumer_email"), results.getString("consumer_password"), results.getBoolean("subscriber"));
-            }
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                if (results.next()) {
+                    return new ConsumerDTO(results.getInt("consumer_id"), results.getString("consumer_name"), results.getString("consumer_email"), results.getString("consumer_password"), results.getBoolean("subscriber"));
+                }
             }
         }
         return consumers;
     }
 
+    /**
+     *
+     * @param consumer
+     * @throws SQLException
+     */
     @Override
     public void addConsumer(ConsumerDTO consumer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
@@ -74,9 +94,14 @@ public class ConsumerDAOImpl implements ConsumerDAO{
             } else {
                 System.out.println("Failed to add consumer: " + consumer);
             }
-    }
+        }
     }
 
+    /**
+     *
+     * @param consumer
+     * @throws SQLException
+     */
     @Override
     public void updateConsumer(ConsumerDTO consumer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(update)) {
@@ -89,6 +114,11 @@ public class ConsumerDAOImpl implements ConsumerDAO{
         }
     }
 
+    /**
+     *
+     * @param consumer
+     * @throws SQLException
+     */
     @Override
     public void deleteConsumer(ConsumerDTO consumer) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(delete)) {
@@ -96,7 +126,15 @@ public class ConsumerDAOImpl implements ConsumerDAO{
             preparedStatement.executeUpdate();
         }
     }
-        @Override
+
+    /**
+     *
+     * @param consumer_name
+     * @param consumer_password
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public ConsumerDTO getConsumerByUsernameAndPassword(String consumer_name, String consumer_password) throws SQLException {
         ConsumerDTO consumer = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
@@ -105,11 +143,11 @@ public class ConsumerDAOImpl implements ConsumerDAO{
             ResultSet results = preparedStatement.executeQuery();
             if (results.next()) {
                 consumer = new ConsumerDTO(
-                    results.getInt("consumer_id"),
-                    results.getString("consumer_name"),
-                    results.getString("consumer_email"),
-                    results.getString("consumer_password"),
-                    results.getBoolean("subscribed")
+                        results.getInt("consumer_id"),
+                        results.getString("consumer_name"),
+                        results.getString("consumer_email"),
+                        results.getString("consumer_password"),
+                        results.getBoolean("subscribed")
                 );
             }
         }
@@ -117,4 +155,3 @@ public class ConsumerDAOImpl implements ConsumerDAO{
     }
 
 }
-

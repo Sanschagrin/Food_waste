@@ -9,13 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharitableDAOImpl implements CharitableDAO {
+
     private static Connection connection;
-    
+
+    /**
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public CharitableDAOImpl() throws SQLException, ClassNotFoundException {
-    this.connection = DBConnection.getConnection();
+        this.connection = DBConnection.getConnection();
     }
-    
-      // Constructor with Connection parameter
+
+    // Constructor with Connection parameter
+    /**
+     *
+     * @param connection
+     */
     public CharitableDAOImpl(Connection connection) {
         this.connection = connection;
     }
@@ -27,7 +37,11 @@ public class CharitableDAOImpl implements CharitableDAO {
     private static final String delete = "DELETE FROM charitable WHERE charitable_id = ?";
     private static final String QUERY = "SELECT * FROM charitable WHERE username = ? AND password = ?";
 
-
+    /**
+     *
+     * @return List<CharitableDTO>
+     * @throws SQLException
+     */
     @Override
     public List<CharitableDTO> getAllCharitable() throws SQLException {
         List<CharitableDTO> charitables = new ArrayList<>();
@@ -40,21 +54,32 @@ public class CharitableDAOImpl implements CharitableDAO {
         return charitables;
     }
 
+    /**
+     *
+     * @param charitable_id
+     * @return
+     * @throws SQLException
+     */
     @Override
     public CharitableDTO getCharitableById(int charitable_id) throws SQLException {
         CharitableDTO charitables = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(byID)) {
             preparedStatement.setInt(1, charitable_id);
-            try(ResultSet results = preparedStatement.executeQuery()){
-            if (results.next()) {
-                return new CharitableDTO(results.getInt("charitable_id"), results.getString("charitable_name"), results.getString("charitable_email"), results.getString("charitable_password"),
-                results.getString("charitable_description"));
-            }
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                if (results.next()) {
+                    return new CharitableDTO(results.getInt("charitable_id"), results.getString("charitable_name"), results.getString("charitable_email"), results.getString("charitable_password"),
+                            results.getString("charitable_description"));
+                }
             }
         }
         return charitables;
     }
 
+    /**
+     *
+     * @param charitable
+     * @throws SQLException
+     */
     @Override
     public void addCharitable(CharitableDTO charitable) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(insert)) {
@@ -68,9 +93,14 @@ public class CharitableDAOImpl implements CharitableDAO {
             } else {
                 System.out.println("Failed to add course: " + charitable);
             }
-    }
+        }
     }
 
+    /**
+     *
+     * @param charitable
+     * @throws SQLException
+     */
     @Override
     public void updateCharitable(CharitableDTO charitable) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(update)) {
@@ -83,6 +113,11 @@ public class CharitableDAOImpl implements CharitableDAO {
         }
     }
 
+    /**
+     *
+     * @param charitable
+     * @throws SQLException
+     */
     @Override
     public void deleteCharitable(CharitableDTO charitable) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(delete)) {
@@ -90,7 +125,15 @@ public class CharitableDAOImpl implements CharitableDAO {
             preparedStatement.executeUpdate();
         }
     }
-     @Override
+
+    /**
+     *
+     * @param charitable_name
+     * @param charitable_password
+     * @return
+     * @throws SQLException
+     */
+    @Override
     public CharitableDTO getCharitableByUsernameAndPassword(String charitable_name, String charitable_password) throws SQLException {
         CharitableDTO org = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
@@ -99,12 +142,11 @@ public class CharitableDAOImpl implements CharitableDAO {
             ResultSet results = preparedStatement.executeQuery();
             if (results.next()) {
                 org = new CharitableDTO(
-                    results.getInt("charitable_id"),
-                    results.getString("charitable_name"),
-                    results.getString("charitable_email"),
-                    results.getString("charitable_password"),
-                    results.getString("charitable_description")
-                    
+                        results.getInt("charitable_id"),
+                        results.getString("charitable_name"),
+                        results.getString("charitable_email"),
+                        results.getString("charitable_password"),
+                        results.getString("charitable_description")
                 );
             }
         }

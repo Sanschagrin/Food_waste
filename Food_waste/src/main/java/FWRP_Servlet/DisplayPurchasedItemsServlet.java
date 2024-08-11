@@ -14,6 +14,13 @@ import java.util.List;
 @WebServlet("/DisplayPurchasedItemsServlet")
 public class DisplayPurchasedItemsServlet extends HttpServlet {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

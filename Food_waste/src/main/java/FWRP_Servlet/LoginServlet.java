@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FWRP_Servlet;
 
 import DataAccess.*;
@@ -17,6 +13,14 @@ import java.util.List;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -70,28 +74,26 @@ public class LoginServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("Failed.jsp");
         }
-    
-    
+
         try {
-        // Fetch retailer information
-        String retailerIdParam = request.getParameter("retailer_id");
-        if (retailerIdParam == null || retailerIdParam.isEmpty()) {
-            throw new NumberFormatException("Retailer ID is missing or invalid");
+            // Fetch retailer information
+            String retailerIdParam = request.getParameter("retailer_id");
+            if (retailerIdParam == null || retailerIdParam.isEmpty()) {
+                throw new NumberFormatException("Retailer ID is missing or invalid");
+            }
+            int retailerId = Integer.parseInt(retailerIdParam);
+
+            RetailerDAO retailerDAO = new RetailerDAOImpl();
+            List<RetailerDTO> retailers = retailerDAO.getAllRetailers();
+            request.setAttribute("retailers", retailers);
+
+            InventoryDAO inventoryDAO = new InventoryDAOImpl();
+            List<InventoryDTO> item = inventoryDAO.getItemsByRetailerId(retailerId); // Fetch items for the specific retailer
+            request.setAttribute("item", item);
+
+            request.getRequestDispatcher("RetailerHome.jsp").forward(request, response);
+        } catch (SQLException | ClassNotFoundException | NumberFormatException e) {
+            throw new ServletException("Error retrieving data", e);
         }
-        int retailerId = Integer.parseInt(retailerIdParam);
-
-        RetailerDAO retailerDAO = new RetailerDAOImpl();
-        List<RetailerDTO> retailers = retailerDAO.getAllRetailers();
-        request.setAttribute("retailers", retailers);
-
-        InventoryDAO inventoryDAO = new InventoryDAOImpl();
-        List<InventoryDTO> item = inventoryDAO.getItemsByRetailerId(retailerId); // Fetch items for the specific retailer
-        request.setAttribute("item", item);
-
-        request.getRequestDispatcher("RetailerHome.jsp").forward(request, response);
-    } catch (SQLException | ClassNotFoundException | NumberFormatException e) {
-        throw new ServletException("Error retrieving data", e);
     }
 }
-}
-   

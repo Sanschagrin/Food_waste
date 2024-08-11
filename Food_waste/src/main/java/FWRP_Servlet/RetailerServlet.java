@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/RetailerServlet")
 public class RetailerServlet extends HttpServlet {
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

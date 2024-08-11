@@ -14,11 +14,18 @@ import java.sql.SQLException;
 @WebServlet("/ClaimOrPurchaseServlet")
 public class ClaimOrPurchaseServlet extends HttpServlet {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         handleRequest(request, response);
     }
-    
+
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Object user = session.getAttribute("user");
@@ -45,7 +52,7 @@ public class ClaimOrPurchaseServlet extends HttpServlet {
         try {
             if ("claim".equals(action) && user instanceof CharitableDTO) {
                 CharitableDTO charitable = (CharitableDTO) user;
-                processClaim(charitable.getCharitableId(), item_id, quantity);            
+                processClaim(charitable.getCharitableId(), item_id, quantity);
                 response.sendRedirect("OrgHome.jsp"); // Redirect to org home page after processing
 
             } else if ("purchase".equals(action) && user instanceof ConsumerDTO) {
@@ -63,6 +70,14 @@ public class ClaimOrPurchaseServlet extends HttpServlet {
         }
     }
 
+    /**
+     *
+     * @param charitable_id
+     * @param item_id
+     * @param quantity
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private void processClaim(int charitable_id, int item_id, int quantity) throws SQLException, ClassNotFoundException {
         ClaimDAO claimDAO = new ClaimDAOImpl();
         ClaimItemDAO claimItemDAO = new ClaimItemDAOImpl();
@@ -87,7 +102,15 @@ public class ClaimOrPurchaseServlet extends HttpServlet {
         claimItemDAO.addClaimItem(claimItem);
     }
 
-        private void processPurchase(int consumer_id, int item_id, int quantity) throws SQLException, ClassNotFoundException {
+    /**
+     *
+     * @param consumer_id
+     * @param item_id
+     * @param quantity
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    private void processPurchase(int consumer_id, int item_id, int quantity) throws SQLException, ClassNotFoundException {
         PurchaseDAO purchaseDAO = new PurchaseDAOImpl();
         PurchaseItemDAO purchaseItemDAO = new PurchaseItemDAOImpl();
         InventoryDAO inventoryDAO = new InventoryDAOImpl();
@@ -110,7 +133,13 @@ public class ClaimOrPurchaseServlet extends HttpServlet {
         PurchaseItemDTO purchaseItem = new PurchaseItemDTO(purchase_id, item_id, quantity);
         purchaseItemDAO.addPurchaseItem(purchaseItem);
     }
-        
+
+    /**
+     *
+     * @param response
+     * @param message
+     * @throws IOException
+     */
     private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request

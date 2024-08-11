@@ -6,13 +6,13 @@ import javax.ws.rs.core.Response;
 
 /**
  *
- * @author 
+ * @author
  */
 @Path("rest")
 public class JakartaEE8Resource {
-    
+
     @GET
-    public Response ping(){
+    public Response ping() {
         return Response
                 .ok("ping")
                 .build();

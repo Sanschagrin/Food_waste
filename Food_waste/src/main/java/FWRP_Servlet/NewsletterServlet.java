@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package FWRP_Servlet;
 
 /**
  *
  * @author ggreg
- */
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import DataAccess.NewsletterDAO;
 import DataAccess.NewsletterDAOImpl;
@@ -26,9 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/listNewsletters")
 public class NewsletterServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private NewsletterDAO newsletterDAO;
 
+    /**
+     *
+     * @throws ServletException
+     */
     @Override
     public void init() throws ServletException {
         try {
@@ -38,6 +35,13 @@ public class NewsletterServlet extends HttpServlet {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
