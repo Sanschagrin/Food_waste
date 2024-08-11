@@ -12,7 +12,7 @@ public interface CharitableDAO {
     /**
      * Retrieves a list of all charitable
      *
-     * @return List<CharitableDTO>
+     * @return List CharitableDTO
      * @throws SQLException
      */
     List<CharitableDTO> getAllCharitable() throws SQLException;

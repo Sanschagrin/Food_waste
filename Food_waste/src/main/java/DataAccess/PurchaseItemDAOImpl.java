@@ -39,7 +39,7 @@ public class PurchaseItemDAOImpl implements PurchaseItemDAO {
     /**
      *
      * @param purchaseId
-     * @return List<PurchaseItemDTO>
+     * @return List PurchaseItemDTO 
      * @throws SQLException
      */
     @Override

@@ -59,7 +59,7 @@ public class ClaimDAOImpl implements ClaimDAO {
 
     /**
      *
-     * @return List<ClaimDTO>
+     * @return List ClaimDTO
      * @throws SQLException
      */
     @Override

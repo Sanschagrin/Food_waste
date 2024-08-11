@@ -11,7 +11,7 @@ public interface InventoryDAO {
 
     /**
      *
-     * @return List<InventoryDTO>
+     * @return List InventoryDTO
      * @throws SQLException
      */
     List<InventoryDTO> getAllItems() throws SQLException;
@@ -48,7 +48,7 @@ public interface InventoryDAO {
     /**
      *
      * @param retailerId
-     * @return List<InventoryDTO>
+     * @return List InventoryDTO
      * @throws SQLException
      */
     List<InventoryDTO> getItemsByRetailerId(int retailerId) throws SQLException;  // New method

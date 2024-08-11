@@ -39,7 +39,7 @@ public class CharitableDAOImpl implements CharitableDAO {
 
     /**
      *
-     * @return List<CharitableDTO>
+     * @return List CharitableDTO
      * @throws SQLException
      */
     @Override

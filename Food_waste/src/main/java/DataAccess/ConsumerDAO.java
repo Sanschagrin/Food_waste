@@ -11,7 +11,7 @@ public interface ConsumerDAO {
 
     /**
      *
-     * @return List<ConsumerDTO>
+     * @return List ConsumerDTO
      * @throws SQLException
      */
     List<ConsumerDTO> getAllConsumers() throws SQLException;

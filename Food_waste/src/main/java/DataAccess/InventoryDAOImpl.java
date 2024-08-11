@@ -136,7 +136,7 @@ public class InventoryDAOImpl implements InventoryDAO {
     /**
      *
      * @param retailerId
-     * @return List<InventoryDTO>
+     * @return List InventoryDTO
      * @throws SQLException
      */
     @Override

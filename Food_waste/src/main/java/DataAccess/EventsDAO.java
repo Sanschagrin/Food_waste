@@ -11,7 +11,7 @@ public interface EventsDAO {
 
     /**
      *
-     * @return List<EventsDTO>
+     * @return List EventsDTO
      * @throws SQLException
      */
     List<EventsDTO> getAllEvents() throws SQLException;

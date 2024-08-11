@@ -30,7 +30,7 @@ public interface ClaimItemDAO {
 
     /**
      *
-     * @return List<ClaimItemDTO>
+     * @return List ClaimItemDTO
      */
     List<ClaimItemDTO> getAllClaims();
 
@@ -46,7 +46,7 @@ public interface ClaimItemDAO {
     /**
      *
      * @param claims
-     * @return List<ClaimDTO> claims
+     * @return List ClaimDTO claims
      * @throws SQLException
      */
     List<ClaimItemDTO> getClaimItemsByClaims(List<ClaimDTO> claims) throws SQLException;
@@ -54,7 +54,7 @@ public interface ClaimItemDAO {
     /**
      *
      * @param charitableId
-     * @return List<ClaimItemDTO>
+     * @return List ClaimItemDTO
      * @throws SQLException
      * @throws ClassNotFoundException
      */

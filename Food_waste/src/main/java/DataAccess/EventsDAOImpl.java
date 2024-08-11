@@ -32,7 +32,7 @@ public class EventsDAOImpl implements EventsDAO {
 
     /**
      *
-     * @return List<EventsDTO>
+     * @return List EventsDTO
      * @throws SQLException
      */
     @Override

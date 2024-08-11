@@ -15,7 +15,7 @@ public interface PurchaseItemDAO {
     /**
      *
      * @param purchaseId
-     * @return List<PurchaseItemDTO>
+     * @return List PurchaseItemDTO
      * @throws SQLException
      */
     List<PurchaseItemDTO> getPurchaseItemsByPurchaseId(int purchaseId) throws SQLException;

@@ -65,7 +65,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
     /**
      *
      * @param consumerId
-     * @return List<PurchaseDTO>
+     * @return List PurchaseDTO
      * @throws SQLException
      */
     @Override
@@ -85,7 +85,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
     /**
      *
      * @param consumerId
-     * @return List<PurchaseDTO>
+     * @return List PurchaseDTO 
      * @throws SQLException
      */
     @Override

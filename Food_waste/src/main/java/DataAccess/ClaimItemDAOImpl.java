@@ -37,7 +37,7 @@ public class ClaimItemDAOImpl implements ClaimItemDAO {
     /**
      *
      * @param claim_id
-     * @return List<ClaimItemDTO>
+     * @return List ClaimItemDTO
      */
     @Override
     public List<ClaimItemDTO> getClaimItemsByClaimId(int claim_id) {
@@ -106,7 +106,7 @@ public class ClaimItemDAOImpl implements ClaimItemDAO {
     /**
      *
      * @param claims
-     * @return List<ClaimItemDTO>
+     * @return List ClaimItemDTO
      * @throws SQLException
      */
     @Override

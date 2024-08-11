@@ -27,7 +27,7 @@ public interface PurchaseDAO {
     /**
      *
      * @param consumerId
-     * @return List<PurchaseItemDTO>
+     * @return List PurchaseItemDTO
      * @throws SQLException
      */
     List<PurchaseDTO> getPurchasesByConsumerId(int consumerId) throws SQLException;
@@ -35,7 +35,7 @@ public interface PurchaseDAO {
     /**
      *
      * @param consumerId
-     * @return List<PurchaseItemDTO>
+     * @return List PurchaseItemDTO
      * @throws SQLException
      */
     List<PurchaseItemDTO> getPurchaseItemsByConsumerId(int consumerId) throws SQLException;

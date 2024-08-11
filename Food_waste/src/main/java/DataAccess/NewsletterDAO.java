@@ -11,7 +11,7 @@ public interface NewsletterDAO {
 
     /**
      *
-     * @return List<NewsletterDTO>
+     * @return List NewsletterDTO
      * @throws SQLException
      */
     List<NewsletterDTO> getAllNewsletters() throws SQLException;
